@@ -1,0 +1,75 @@
+apply plugin: 'com.android.application'
+apply from: this.rootProject.file('tinkerpatch.gradle')
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.wanandroid.zhangtianzhu.tinkertestdemo"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    //需要放在buildType前面
+    signingConfigs {
+        release {
+            try {
+                //发布版本签名
+                //路径要写成完整的路径
+                storeFile file("/Users/zhangtianzhu/Downloads/AndroidProject/TinkerTestDemo/keystore/release-keystore.jks")
+                storePassword "qwedsa"
+                keyAlias "release"
+                keyPassword "qwedsa"
+            } catch (ex) {
+                throw new InvalidUserDataException(ex.toString())
+            }
+        }
+
+        debug {
+            storeFile file("/Users/zhangtianzhu/Downloads/AndroidProject/TinkerTestDemo/keystore/debug-keystore.jks")
+            storePassword "qwedsa"
+            keyAlias "debug"
+            keyPassword "qwedsa"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), project.file('proguard-rules.pro')
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    //若使用annotation需要单独引用,对于tinker的其他库都无需再引用
+    annotationProcessor("com.tinkerpatch.tinker:tinker-android-anno:${TINKER_VERSION}") {
+        changing = true
+    }
+    compileOnly("com.tinkerpatch.tinker:tinker-android-anno:${TINKER_VERSION}") {
+        changing = true
+    }
+    implementation("com.tinkerpatch.sdk:tinkerpatch-android-sdk:${TINKERPATCH_VERSION}") {
+        changing = true
+    }
+}
