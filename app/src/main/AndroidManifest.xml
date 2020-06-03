@@ -27,19 +27,21 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".arcgis.GraphicsOverlayActivity"
-            android:screenOrientation="sensorLandscape">
+        <activity android:name=".arcgis.LocationArcGisActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".arcgis.AddGraphicsRendererActivity">
+        <activity
+            android:name=".arcgis.GraphicsOverlayActivity"
+            android:screenOrientation="sensorLandscape">
 
         </activity>
-        <activity android:name=".arcgis.ArcGisChangeSublayerVisibilityActivity"></activity>
-        <activity android:name=".arcgis.ArcGisDisplayDrawingStatusActivity"></activity>
+        <activity android:name=".arcgis.AddGraphicsRendererActivity"></activity>
+        <activity android:name=".arcgis.ArcGisChangeSublayerVisibilityActivity" />
+        <activity android:name=".arcgis.ArcGisDisplayDrawingStatusActivity" />
         <activity
             android:name=".arcgis.ArcGisActivity"
             android:screenOrientation="portrait" />
