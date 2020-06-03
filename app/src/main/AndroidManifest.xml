@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wanandroid.zhangtianzhu.tinkertestdemo">
+    <!--
+其中，权限1在得到默认蓝牙适配器时需要，即BluetoothAdapter
+mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
+    -->
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- 权限2在mBluetoothAdapter.enable( )或者mBluetoothAdapter.disable( ) 时需要使用到。 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 如果Android6.0 蓝牙搜索不到设备，需要补充下面两个权限 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
         android:name=".App"
@@ -10,13 +27,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".arcgis.GraphicsOverlayActivity"
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".arcgis.AddGraphicsRendererActivity">
+
+        </activity>
+        <activity android:name=".arcgis.ArcGisChangeSublayerVisibilityActivity"></activity>
+        <activity android:name=".arcgis.ArcGisDisplayDrawingStatusActivity"></activity>
+        <activity
+            android:name=".arcgis.ArcGisActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bluetooth.BluetoothActivityTwo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".bluetooth.BlueToothActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".arcgis.GraphicsOverlayActivity">
+
+    <com.esri.arcgisruntime.mapping.view.MapView
+        android:id="@+id/graphic_mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_draw_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绘制点" />
+
+        <RadioButton
+            android:id="@+id/rb_draw_polyline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绘制线" />
+
+        <RadioButton
+            android:id="@+id/rb_draw_scroll_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绘制曲线" />
+
+        <RadioButton
+            android:id="@+id/rb_draw_polygon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绘制面" />
+
+        <RadioButton
+            android:id="@+id/rb_add_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加图片" />
+
+        <RadioButton
+            android:id="@+id/rb_draw_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绘制圆" />
+
+        <RadioButton
+            android:id="@+id/rb_draw_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绘制文字" />
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/radiogroup"
+        android:onClick="clear"
+        android:text="清除" />
+</RelativeLayout>

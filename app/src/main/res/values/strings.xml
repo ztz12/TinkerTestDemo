@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TinkerTestDemo</string>
+    <string name="drawer_open">打开侧栏</string>
+    <string name="drawer_close">关闭侧栏</string>
 </resources>
