@@ -78,4 +78,5 @@ dependencies {
         changing = true
     }
     implementation 'com.esri.arcgisruntime:arcgis-android:100.6.0'
+    implementation 'com.google.android.material:material:1.1.0'
 }

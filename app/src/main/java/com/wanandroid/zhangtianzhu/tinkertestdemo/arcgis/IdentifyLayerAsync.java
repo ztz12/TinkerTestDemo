@@ -153,14 +153,22 @@ public class IdentifyLayerAsync extends AppCompatActivity {
                 featureLayer.clearSelection();
 
                 int torleance = 1;
+                //获取每个与密度无关的像素（dp）的地图单位数（以地图空间参考单位为现实单位）。
+                // 这是地图在屏幕上的当前空间分辨率，可用于计算屏幕上的地图距离和有效比例。
+                //返回值：
+                //每个与密度无关的像素的映射单位数
                 double mapTorlance = torleance * mMapView.getUnitsPerDensityIndependentPixel();
                 SpatialReference spatialReference = mMapView.getSpatialReference();
                 Envelope envelope = new Envelope(clickPoint.getX() - mapTorlance, clickPoint.getX() - mapTorlance,
                         clickPoint.getY() + mapTorlance, clickPoint.getY() + mapTorlance, spatialReference);
+
                 //空间查询参数，表示查询输入的参数
                 QueryParameters queryParameters = new QueryParameters();
                 queryParameters.setGeometry(envelope);
+
+                //SpatialRelationship：定义在QueryParameters上设置的几何与要素表的要素的几何之间的空间关系。
                 queryParameters.setSpatialRelationship(QueryParameters.SpatialRelationship.WITHIN);
+
                 //ListenableFuture：一种特殊的Future 允许在异步计算完成后将监听设置为运行
                 //FeatureQueryResult：表示对FutureTable的查询结果，该迭代器遍历找到的功能
                 ListenableFuture<FeatureQueryResult> featureQueryResultListenableFuture = featureLayer.selectFeaturesAsync(queryParameters, FeatureLayer.SelectionMode.NEW);
@@ -171,9 +179,11 @@ public class IdentifyLayerAsync extends AppCompatActivity {
                             FeatureQueryResult queryResult = featureQueryResultListenableFuture.get();
                             Iterator<Feature> iterator = queryResult.iterator();
                             while (iterator.hasNext()) {
+
                                 //Feature 地图上真实对象的表示。 要素保留在数据存储区（例如数据库或服务）或地图的FeatureTable中。
                                 // 同一数据存储区或要素层中的要素具有共同的属性架构。
                                 Feature feature = iterator.next();
+                                //高亮显示选择区域
                                 featureLayer.selectFeature(feature);
                                 Geometry geometry = feature.getGeometry();
                                 Envelope envelope1 = geometry.getExtent();

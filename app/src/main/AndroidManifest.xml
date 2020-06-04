@@ -27,16 +27,21 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".arcgis.IdentifyLayerAsync">
+        <activity android:name=".arcgis.SketchEditorActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".arcgis.ArgisFetureLayerActivity">
+        <activity android:name=".arcgis.RasterFunctionServiceActivity">
+
         </activity>
-        <activity android:name=".arcgis.CalloutActivity"></activity>
+        <activity android:name=".arcgis.RasterLayerActivity"></activity>
+        <activity android:name=".arcgis.ShapeFileActivity" />
+        <activity android:name=".arcgis.IdentifyLayerAsync" />
+        <activity android:name=".arcgis.ArgisFetureLayerActivity" />
+        <activity android:name=".arcgis.CalloutActivity" />
         <activity android:name=".arcgis.LocationArcGisActivity" />
         <activity
             android:name=".arcgis.GraphicsOverlayActivity"

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".arcgis.SketchEditorActivity">
+
+    <com.esri.arcgisruntime.mapping.view.MapView
+        android:id="@+id/sktech_mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btn_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="单点绘制模式"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_multi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="多点绘制模式"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_polyline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="折现绘制模式"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_polygon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="多边形绘制模式"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_freehandleLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="徒手绘制线"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_freePolygon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="徒手绘制多边形"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btn_undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="撤销绘制"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="停止绘制"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_redo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="恢复上一次绘制"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
