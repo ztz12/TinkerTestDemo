@@ -117,6 +117,8 @@ public class BluetoothActivityTwo extends AppCompatActivity implements CompoundB
             if (BluetoothUtil.getBlueToothStatus(BluetoothActivityTwo.this)) {
                 // 弹出是否允许扫描蓝牙设备的选择对话框
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                //设置检测蓝牙时间，默认为120s，通过以下方式设置为100s
+                intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 100);
                 startActivityForResult(intent, mOpenCode);
             } else {
                 mHandler.postDelayed(this, 1000);
