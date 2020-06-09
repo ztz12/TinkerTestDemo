@@ -34,6 +34,7 @@ import com.wanandroid.zhangtianzhu.tinkertestdemo.R;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.bluetooth.adapter.BlueListAdapter;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.bluetooth.bean.BlueDevice;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.bluetooth.util.BluetoothUtil;
+import com.wanandroid.zhangtianzhu.tinkertestdemo.utils.AssistStatic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -334,10 +335,13 @@ public class BluetoothActivityTwo extends AppCompatActivity implements CompoundB
         BluetoothDevice device = mBluetooth.getRemoteDevice(item.address);
         Log.d(TAG, "getBondState=" + device.getBondState() + ", item.state=" + item.state);
         if (device.getBondState() == BluetoothDevice.BOND_NONE) { // 尚未配对
-            BluetoothUtil.createBond(device); // 创建配对信息
+            boolean isSuccess = BluetoothUtil.createBond(device); // 创建配对信息
+            if (isSuccess) {
+                AssistStatic.showToast(BluetoothActivityTwo.this, "配对成功");
+            }
         } else if (device.getBondState() == BluetoothDevice.BOND_BONDED) { // 已经配对
             boolean isSucc = BluetoothUtil.removeBond(device); // 移除配对信息
-            if (!isSucc) {
+            if (isSucc) {
                 refreshDevice(device, BluetoothDevice.BOND_NONE);
             }
         }

@@ -27,15 +27,12 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".arcgis.SceneViewActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".arcgis.WmsLayerActivity"></activity>
-        <activity android:name=".arcgis.SketchEditorActivity"></activity>
+        <activity android:name=".bluetooth.TestActivity"></activity>
+        <activity android:name=".arcgis.SceneViewActivity"></activity>
+        <activity android:name=".arcgis.WmsLayerActivity" />
+        <activity
+            android:name=".arcgis.SketchEditorActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".arcgis.RasterFunctionServiceActivity" />
         <activity android:name=".arcgis.RasterLayerActivity" />
         <activity android:name=".arcgis.ShapeFileActivity" />
@@ -54,7 +51,13 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
             android:screenOrientation="portrait" />
         <activity
             android:name=".bluetooth.BluetoothActivityTwo"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".bluetooth.BlueToothActivity"
             android:screenOrientation="portrait" />
