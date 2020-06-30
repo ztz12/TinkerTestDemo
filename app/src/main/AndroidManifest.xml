@@ -66,6 +66,7 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
             android:name=".bluetooth.BlueToothActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".MainActivity" />
+        <service android:name=".gps.GpsService"/>
     </application>
 
 </manifest>
