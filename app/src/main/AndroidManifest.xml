@@ -7,12 +7,11 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
     -->
     <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- 权限2在mBluetoothAdapter.enable( )或者mBluetoothAdapter.disable( ) 时需要使用到。 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 如果Android6.0 蓝牙搜索不到设备，需要补充下面两个权限 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 精确的位置权限 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 粗略的位置权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
@@ -27,12 +26,22 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".bluetooth.TestActivity"></activity>
-        <activity android:name=".arcgis.SceneViewActivity"></activity>
+        <activity android:name=".BaseActivity"></activity>
+        <activity
+            android:name=".gps.GpsActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".bluetooth.TestActivity" />
+        <activity android:name=".arcgis.SceneViewActivity" />
         <activity android:name=".arcgis.WmsLayerActivity" />
         <activity
             android:name=".arcgis.SketchEditorActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity android:name=".arcgis.RasterFunctionServiceActivity" />
         <activity android:name=".arcgis.RasterLayerActivity" />
         <activity android:name=".arcgis.ShapeFileActivity" />
@@ -52,11 +61,6 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         <activity
             android:name=".bluetooth.BluetoothActivityTwo"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".bluetooth.BlueToothActivity"
