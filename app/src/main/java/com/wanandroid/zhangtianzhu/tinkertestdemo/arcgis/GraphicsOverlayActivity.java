@@ -54,6 +54,9 @@ public class GraphicsOverlayActivity extends AppCompatActivity {
     private GraphicsOverlay mGraphicsOverlay;
 
     /**
+     * Multipoint 表示由零件组成的集合，每个零件都是线段集合 Multipart是Polygon和Polyline实例化类从其继承的抽象类。
+     * getParts（）方法返回组成Multipart几何的零件的不可变集合。 每个部分都彼此独立，但是存在针对不同类型的多部分的规则。
+     * 使用“简化”将创建一个形状的副本，该副本应遵守该几何类型的拓扑简单性规则
      * 表示用于从MultipointBuilder创建多点几何的可变点集合。 可以将点添加到集合中，从集合中插入或从集合中删除，以定义或更改多点的形状。 也用于几何构造器和构造器。
      * 添加到PointCollection的任何Point的SpatialReference必须与PointCollection的SpatialReference匹配，
      * 或者为null（在这种情况下，假定这些Point与PointCollection具有相同的SpatialReference）。
