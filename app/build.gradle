@@ -19,16 +19,12 @@ android {
     //需要放在buildType前面
     signingConfigs {
         release {
-            try {
-                //发布版本签名
-                //路径要写成完整的路径
-                storeFile file("/Users/zhangtianzhu/Downloads/AndroidProject/TinkerTestDemo/keystore/release-keystore.jks")
-                storePassword "qwedsa"
-                keyAlias "release"
-                keyPassword "qwedsa"
-            } catch (ex) {
-                throw new InvalidUserDataException(ex.toString())
-            }
+            //发布版本签名
+            //路径要写成完整的路径
+            storeFile file("/Users/zhangtianzhu/Downloads/AndroidProject/TinkerTestDemo/keystore/release-keystore.jks")
+            storePassword "qwedsa"
+            keyAlias "release"
+            keyPassword "qwedsa"
         }
 
         debug {

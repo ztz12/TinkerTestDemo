@@ -26,22 +26,18 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".BaseActivity" />
         <activity
             android:name=".gps.GpsActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".bluetooth.TestActivity" />
         <activity android:name=".arcgis.SceneViewActivity" />
         <activity android:name=".arcgis.WmsLayerActivity" />
         <activity
             android:name=".arcgis.SketchEditorActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
         <activity android:name=".arcgis.RasterFunctionServiceActivity" />
         <activity android:name=".arcgis.RasterLayerActivity" />
         <activity android:name=".arcgis.ShapeFileActivity" />
@@ -57,16 +53,24 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         <activity android:name=".arcgis.ArcGisDisplayDrawingStatusActivity" />
         <activity
             android:name=".arcgis.ArcGisActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".bluetooth.BluetoothActivityTwo"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".bluetooth.BlueToothActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".MainActivity" />
-        <service android:name=".gps.GpsService"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <service android:name=".gps.GpsService" />
     </application>
 
 </manifest>
