@@ -18,6 +18,7 @@ import com.esri.arcgisruntime.mapping.view.Callout;
 import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.R;
+import com.wanandroid.zhangtianzhu.tinkertestdemo.arcgis.adapter.CalloutAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 public class CalloutActivity extends AppCompatActivity {
     private MapView calloutMapView;
     private List<String> dataList;
+    private List<LengthData> lengthDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +55,12 @@ public class CalloutActivity extends AppCompatActivity {
 
     private void showCallOutView(Point point) {
         View calloutView = LayoutInflater.from(this).inflate(R.layout.callout_view, null);
-        ListView lv = calloutView.findViewById(R.id.callout_listView);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, dataList);
-        lv.setAdapter(arrayAdapter);
+        ListView listView = calloutView.findViewById(R.id.callout_listView);
+        CalloutAdapter calloutAdapter = new CalloutAdapter(this, lengthDataList);
+        listView.setAdapter(calloutAdapter);
+//        ListView lv = calloutView.findViewById(R.id.callout_listView);
+//        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, dataList);
+//        lv.setAdapter(arrayAdapter);
 
         //在MapView上绘制标注并管理其行为。 标注会显示一个包含文本和/或其他内容的Android视图。 它的领导者指向标注所指的位置。
         // 标注的主体是一个带有弯曲拐角的矩形区域，其中包含应用程序提供的内容视图。 在整个标注周围绘制了一条细边框。
@@ -74,17 +79,24 @@ public class CalloutActivity extends AppCompatActivity {
         style.setCornerRadius(8); //设置圆角半径
         //style.setLeaderLength(50); //设置指示性长度
         //style.setLeaderWidth(5); //设置指示性宽度
-        style.setLeaderPosition(Callout.Style.LeaderPosition.LOWER_MIDDLE); //设置指示性位置
+        style.setLeaderPosition(Callout.Style.LeaderPosition.LOWER_LEFT_CORNER); //设置指示性位置
         callout.setStyle(style);
         callout.setContent(calloutView);
         //通过地图中指定Point来设置callout位置
         callout.setLocation(point);
         callout.show();
 
-        calloutMapView.setViewpointCenterAsync(point);
+//        calloutMapView.setViewpointCenterAsync(point);
     }
 
     private void initData() {
+        lengthDataList = new ArrayList<>();
+        for(int i=0;i<20;i++){
+            LengthData lengthData = new LengthData();
+            lengthData.setNumber(i+1);
+            lengthData.setLength((i+1)*10);
+            lengthDataList.add(lengthData);
+        }
         dataList = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {

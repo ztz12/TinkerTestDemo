@@ -2,6 +2,7 @@ package com.wanandroid.zhangtianzhu.tinkertestdemo.arcgis;
 
 import android.graphics.Color;
 import android.os.Environment;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -10,9 +11,15 @@ import com.esri.arcgisruntime.data.Feature;
 import com.esri.arcgisruntime.data.FeatureQueryResult;
 import com.esri.arcgisruntime.data.QueryParameters;
 import com.esri.arcgisruntime.data.ShapefileFeatureTable;
+import com.esri.arcgisruntime.geometry.AngularUnit;
+import com.esri.arcgisruntime.geometry.AngularUnitId;
 import com.esri.arcgisruntime.geometry.Envelope;
+import com.esri.arcgisruntime.geometry.GeodeticCurveType;
 import com.esri.arcgisruntime.geometry.Geometry;
+import com.esri.arcgisruntime.geometry.GeometryEngine;
 import com.esri.arcgisruntime.geometry.GeometryType;
+import com.esri.arcgisruntime.geometry.LinearUnit;
+import com.esri.arcgisruntime.geometry.LinearUnitId;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
@@ -252,6 +259,25 @@ public class ArcGisActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         });
+    }
+
+    /**
+     * 获取两个点的经度与纬度，计算两个点之间的距离
+     *
+     * @param lon1 经度
+     * @param lan1 纬度
+     * @param lon2
+     * @param lan2
+     */
+    private void distancePoints(double lon1, double lan1, double lon2, double lan2) {
+        Point point1 = new Point(lon1, lan1, SpatialReferences.getWgs84());
+        Point point2 = new Point(lon2, lan2, SpatialReferences.getWgs84());
+        //距离单位
+        LinearUnit linearUnit = new LinearUnit(LinearUnitId.METERS);
+        //角度单位
+        AngularUnit angularUnit = new AngularUnit(AngularUnitId.DEGREES);
+        double distance = GeometryEngine.distanceGeodetic(point1, point2, linearUnit, angularUnit, GeodeticCurveType.GEODESIC).getDistance();
+        Log.i("distancePoints", "点长度为" + distance);
     }
 
 

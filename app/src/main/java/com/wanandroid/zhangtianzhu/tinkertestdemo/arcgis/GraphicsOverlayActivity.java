@@ -1,17 +1,32 @@
 package com.wanandroid.zhangtianzhu.tinkertestdemo.arcgis;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 
+import com.esri.arcgisruntime.geometry.GeometryEngine;
+import com.esri.arcgisruntime.geometry.ImmutablePart;
+import com.esri.arcgisruntime.geometry.ImmutablePartCollection;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.geometry.Polygon;
@@ -31,6 +46,7 @@ import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.R;
+import com.wanandroid.zhangtianzhu.tinkertestdemo.utils.ViewDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -197,6 +213,15 @@ public class GraphicsOverlayActivity extends AppCompatActivity {
      * 绘制面
      */
     private void drawPolygon() {
+        pointCollection.add(-109.048, 40.998);
+        pointCollection.add(-102.047, 40.998);
+        pointCollection.add(-102.037, 36.989);
+        pointCollection.add(-109.048, 36.998);
+        Polygon polygon = new Polygon(pointCollection);
+        SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.BLUE, 5);
+        SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.parseColor("#33e97676"), lineSymbol);
+        Graphic graphic = new Graphic(polygon, fillSymbol);
+        mGraphicsOverlay.getGraphics().add(graphic);
         mMapView.setOnTouchListener(new DefaultMapViewOnTouchListener(this, mMapView) {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -219,6 +244,7 @@ public class GraphicsOverlayActivity extends AppCompatActivity {
                 SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.parseColor("#33e97676"), lineSymbol);
                 Graphic graphic = new Graphic(polygon, fillSymbol);
                 mGraphicsOverlay.getGraphics().add(graphic);
+                double area = GeometryEngine.area(polygon);
                 return super.onSingleTapConfirmed(e);
             }
         });
@@ -302,6 +328,44 @@ public class GraphicsOverlayActivity extends AppCompatActivity {
         if (pointList != null) {
             pointList.clear();
         }
+//        showWindow();
+        //mapview必须加载到Fragment或Activity这样的界面中，如果加入到Dialog或者PopupWindow中会出现加载问题，显示错乱
+        new ViewDialogFragment().show(getSupportFragmentManager(), "view");
+    }
+
+    private void showWindow(){
+        View view = LayoutInflater.from(this).inflate(R.layout.map_preview_window,null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setView(view)
+                .setCancelable(true);
+        MapView mapView = view.findViewById(R.id.preview_mapView);
+        ArcGISMap mainArcGISMap = new ArcGISMap(Basemap.Type.OCEANS, 30.671475859566514,
+                104.07567785156248, 11);
+        mapView.setMap(mainArcGISMap);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        Window alertWindow = alertDialog.getWindow();
+        WindowManager windowManager = this.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lParams = alertWindow.getAttributes();
+        lParams.height = dip2px(this,200);
+        lParams.width = dip2px(this,200);
+        alertWindow.setAttributes(lParams);
+        //设置窗体宽度
+//        alertDialog.getWindow().setLayout(dip2px(this,200),dip2px(this,200));
+//        PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+//        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#00000000"));
+//        popupWindow.setBackgroundDrawable(colorDrawable);
+//        popupWindow.setOutsideTouchable(true);
+//        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    /**
+     * 根据手机的分辨率从 dip 的单位 转成为 px(像素)
+     */
+    public int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
     /**
