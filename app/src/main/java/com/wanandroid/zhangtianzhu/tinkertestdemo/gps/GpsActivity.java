@@ -81,6 +81,7 @@ public class GpsActivity extends BaseActivity {
                 double latitude = bundle.getDouble("la");
                 double longitude = bundle.getDouble("long");
                 String fwAngle = bundle.getString("fw");
+                float bearing = bundle.getFloat("bearing");
                 StringBuilder sb = new StringBuilder();
                 sb.append("GPS设备：");
                 sb.append(provider);
@@ -94,6 +95,8 @@ public class GpsActivity extends BaseActivity {
                 sb.append(longitude);
                 sb.append("\n方位：");
                 sb.append(fwAngle);
+                sb.append("\n方位角度：");
+                sb.append(bearing);
                 tvGps.setText(sb.toString());
             }
         }

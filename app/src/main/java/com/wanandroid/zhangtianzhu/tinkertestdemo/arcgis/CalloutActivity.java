@@ -2,6 +2,7 @@ package com.wanandroid.zhangtianzhu.tinkertestdemo.arcgis;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import java.util.List;
 /**
  * 自定义一个标注内容显示在地图上面
  */
+@SuppressLint("ClickableViewAccessibility")
 public class CalloutActivity extends AppCompatActivity {
     private MapView calloutMapView;
     private List<String> dataList;

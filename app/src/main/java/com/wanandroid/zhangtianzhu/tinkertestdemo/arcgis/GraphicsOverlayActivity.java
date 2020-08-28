@@ -62,6 +62,7 @@ import java.util.List;
  * 3、每个图形都必须具有一个setGeometry（Geometry）来描述图形的位置和形状。 如果图形的几何具有不同的SpatialReference，
  * 则会即时将其几何图形重新投影到地图的SpatialReference。 重新投影可能会很昂贵-理想情况下，几何图形应与地图具有相同的SpatialReference，以最大化性能。
  */
+@SuppressLint("ClickableViewAccessibility")
 public class GraphicsOverlayActivity extends AppCompatActivity {
     private MapView mMapView;
 

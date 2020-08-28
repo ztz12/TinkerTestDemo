@@ -168,6 +168,7 @@ public class GpsService extends Service {
         intent.putExtra("la", mLocation.getLatitude());
         intent.putExtra("long", mLocation.getLongitude());
         intent.putExtra("fw", mLocation == null ? "" : getFWAngle(mLocation.getBearing()));
+        intent.putExtra("bearing",mLocation.getBearing());
         intent.setAction("com.wanandroid.zhangtianzhu.tinkertestdemo.gps.GpsService");
         sendBroadcast(intent);
     }
