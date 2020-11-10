@@ -5,6 +5,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.Feature;
@@ -15,12 +17,20 @@ import com.esri.arcgisruntime.geometry.AngularUnit;
 import com.esri.arcgisruntime.geometry.AngularUnitId;
 import com.esri.arcgisruntime.geometry.Envelope;
 import com.esri.arcgisruntime.geometry.GeodeticCurveType;
+import com.esri.arcgisruntime.geometry.GeographicTransformation;
+import com.esri.arcgisruntime.geometry.GeographicTransformationStep;
 import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.GeometryEngine;
 import com.esri.arcgisruntime.geometry.GeometryType;
+import com.esri.arcgisruntime.geometry.ImmutablePart;
+import com.esri.arcgisruntime.geometry.ImmutablePartCollection;
 import com.esri.arcgisruntime.geometry.LinearUnit;
 import com.esri.arcgisruntime.geometry.LinearUnitId;
 import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.PointCollection;
+import com.esri.arcgisruntime.geometry.Polygon;
+import com.esri.arcgisruntime.geometry.Segment;
+import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
 import com.esri.arcgisruntime.layers.FeatureLayer;
@@ -28,6 +38,7 @@ import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.BackgroundGrid;
+import com.esri.arcgisruntime.mapping.view.Callout;
 import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
@@ -40,11 +51,14 @@ import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleRenderer;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.BaseActivity;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.R;
+import com.wanandroid.zhangtianzhu.tinkertestdemo.arcgis.adapter.CalloutAdapter;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.utils.AssistStatic;
 import com.wanandroid.zhangtianzhu.tinkertestdemo.utils.FeatureUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,6 +76,7 @@ public class ArcGisActivity extends BaseActivity implements View.OnClickListener
     private ArcGISMap mainArcGISMap;
 
     private FeatureLayer mainShapefileLayer;
+    private static final String TAG = "ArcGisActivity";
 
     //shp文件
     private String shpPath;
@@ -247,7 +262,8 @@ public class ArcGisActivity extends BaseActivity implements View.OnClickListener
 
                         }
                         String area = FeatureUtils.getFeatureArea(feature);
-                        highlightFeature(feature);
+//                        highlightFeature(feature);
+                        highlightAndShowWindow(clickPoint,feature);
                         //只取选中的第一个
                         break;
                     }
@@ -288,6 +304,156 @@ public class ArcGisActivity extends BaseActivity implements View.OnClickListener
         highLightLayer.getGraphics().clear();
 
         highLightLayer.getGraphics().add(graphic);
+    }
+
+    private void highlightAndShowWindow(Point clickPoint, Feature feature) {
+        List<Double> distanceList = new ArrayList<>();
+        List<Point> pointList = new ArrayList<>();
+
+        Graphic graphic = new Graphic(feature.getGeometry(), highlighFillSymbol);
+        //获取当前选择的要素区域的面积值，将当前要素图形转换成面
+        double area = GeometryEngine.area((Polygon) feature.getGeometry());
+        Polygon polygon = (Polygon) feature.getGeometry();
+        //遍历组成多边形的线段部分，获取起始与结束点，然后获取起始点与结束点形成的线段长度
+        ImmutablePartCollection partCollection = polygon.getParts();
+        for (int i = 0, size = partCollection.size(); i < size; i++) {
+            Log.i(TAG, String.format("Number of Points: %d", partCollection.get(i).getPointCount()));
+            int point = partCollection.get(i).getPointCount();
+            // find the number of Segments - ImmutablePart is a collection of segments
+            Log.i(TAG, String.format("Number of Segments: %d", partCollection.get(i).size()));
+            int sizePartCollection = partCollection.get(i).size();
+            ImmutablePart parts = partCollection.get(i);
+            for (Segment part : parts) {
+                Point startPoint = part.getStartPoint();
+                Point endPoint = part.getEndPoint();
+                //距离单位
+                LinearUnit linearUnit = new LinearUnit(LinearUnitId.METERS);
+                //角度单位
+                AngularUnit angularUnit = new AngularUnit(AngularUnitId.DEGREES);
+                double distance = GeometryEngine.distanceGeodetic(startPoint, endPoint, linearUnit, angularUnit, GeodeticCurveType.GEODESIC).getDistance();
+                double distanceResult = Double.parseDouble(String.format("%.2f", distance));
+                distanceList.add(distanceResult);
+                Log.i("distancePoints", "线段长度为" + String.format("%.2f", distance) + " 米");
+                boolean isClosed = part.isClosed();
+                boolean isCurve = part.isCurve();
+                Log.i(TAG, "线段是否闭合: " + isClosed);
+                Log.i(TAG, "线段是否弯曲: " + isCurve);
+                //获取起始点与结束点坐标
+                double startX = startPoint.getX();
+                double startY = startPoint.getY();
+                double endX = endPoint.getX();
+                double endY = endPoint.getY();
+                Log.i(TAG, String.format("Segment: (%f, %f) to (%f %f)",
+                        startPoint.getX(), startPoint.getY(),
+                        endPoint.getX(), endPoint.getY()));
+
+                //将当前坐标转换成84坐标
+                Point projectedStartPoint = (Point) GeometryEngine.project(startPoint, SpatialReference.create(4236));
+                pointList.add(projectedStartPoint);
+                Log.i(TAG, "projectedPoint: " + projectedStartPoint);
+                Point projectedEndPoint = (Point) GeometryEngine.project(endPoint, SpatialReference.create(4236));
+                double distance84 = GeometryEngine.distanceGeodetic(startPoint, endPoint, linearUnit, angularUnit, GeodeticCurveType.GEODESIC).getDistance();
+                //转换后坐标 线段长度一样
+                Log.i("distance84", "线段长度为" + String.format("%.2f", distance84) + " 米");
+                // Create a GeographicTransformation with a single step using WKID for OSGB_1936_To_WGS_1984_NGA_7PAR transformation
+                GeographicTransformation transform = GeographicTransformation.create(GeographicTransformationStep.create(108336));
+
+                // Project the point to WGS84, using the transformation
+                Point wgs84Pt = (Point) GeometryEngine.project(startPoint, SpatialReferences.getWgs84(), transform);
+                Log.i(TAG, "wgs84 坐标: " + wgs84Pt);
+            }
+        }
+        double length = GeometryEngine.length(((Polygon) feature.getGeometry()).toPolyline());
+
+        //高亮图斑
+        highLightLayer.getGraphics().clear();
+
+        highLightLayer.getGraphics().add(graphic);
+
+
+        List<LengthData> lengthDataList = new ArrayList<>();
+        //弹窗显示边长及坐标
+        StringBuilder sb = new StringBuilder();
+        sb.append("各个边长为：\n");
+        if (distanceList.size() > 0) {
+            for (int i = 0, size = distanceList.size(); i < size; i++) {
+                sb.append(distanceList.get(i) + " 米");
+                sb.append("\n");
+                LengthData lengthData = new LengthData();
+                lengthData.setNumber(i + 1);
+                lengthData.setLength(distanceList.get(i));
+                lengthDataList.add(lengthData);
+            }
+        }
+//        sb.append("总边长为：" + Double.parseDouble(String.format("%.2f", length)) + " 米\n");
+//        sb.append("多边形的坐标：\n");
+
+        PointCollection pointCollection = new PointCollection(SpatialReferences.getWgs84());
+        if (pointList.size() > 0) {
+            for (int i = 0, size = pointList.size(); i < size; i++) {
+//                sb.append("(经度： " + pointList.get(i).getX() + ", 纬度：" + pointList.get(i).getY() + ")");
+//                sb.append("\n");
+                pointCollection.add(pointList.get(i).getX(), pointList.get(i).getY());
+            }
+        }
+
+        //高亮选中的多边形线段
+        Polygon polygon1 = new Polygon(pointCollection);
+        SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, Color.BLUE, 2);
+        SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbol.Style.SOLID, Color.parseColor("#33e97676"), lineSymbol);
+        Graphic graphicP = new Graphic(polygon1, fillSymbol);
+
+        double localPhoneArea = GeometryEngine.area(polygon1);
+        //当前图斑属性的值与本地手机的比值
+        double ratio = area / localPhoneArea;
+
+//        String result = sb.toString();
+//        View view = LayoutInflater.from(context).inflate(R.layout.distance_length_redraw_windwo, null);
+//        TextView tv = view.findViewById(R.id.tv_distance);
+//        RecyclerView rl = view.findViewById(R.id.rl_length_data);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+//        LengthAdapter adapter = new LengthAdapter(context, lengthDataList, R.layout.item_data_length);
+//        rl.setLayoutManager(linearLayoutManager);
+//        rl.setAdapter(adapter);
+//        tv.setText(result);
+
+        View calloutView = View.inflate(this, R.layout.callout_view, null);
+        ListView listView = calloutView.findViewById(R.id.callout_listView);
+        Button btnPreview = calloutView.findViewById(R.id.btn_preview);
+        Button btnUpdate = calloutView.findViewById(R.id.btn_update);
+        CalloutAdapter calloutAdapter = new CalloutAdapter(this, lengthDataList);
+        listView.setAdapter(calloutAdapter);
+        Callout callout = mMapView.getCallout();
+        //设置callout 的样式
+        Callout.Style style = new Callout.Style(this);
+        style.setMaxWidth(300); //设置最大宽度
+        style.setMaxHeight(500);  //设置最大高度
+        style.setMinWidth(180);  //设置最小宽度
+        style.setMinHeight(100);  //设置最小高度
+        style.setBorderWidth(2); //设置边框宽度
+        style.setBorderColor(Color.BLUE); //设置边框颜色
+        style.setBackgroundColor(Color.WHITE); //设置背景颜色
+        style.setCornerRadius(8); //设置圆角半径
+        //style.setLeaderLength(50); //设置指示性长度
+        //style.setLeaderWidth(5); //设置指示性宽度
+        style.setLeaderPosition(Callout.Style.LeaderPosition.LOWER_LEFT_CORNER); //设置指示性位置
+        callout.setStyle(style);
+        callout.setContent(calloutView);
+        //通过地图中指定Point来设置callout位置
+        callout.setLocation(clickPoint);
+        callout.show();
+        btnPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callout.dismiss();
+            }
+        });
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callout.dismiss();
+            }
+        });
     }
 
     /**

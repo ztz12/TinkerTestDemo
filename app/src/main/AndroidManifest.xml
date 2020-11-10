@@ -27,11 +27,6 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".arcgis.IdentifyGraphicsOverlaysAsync">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".BaseActivity" />
         <activity
@@ -51,17 +46,20 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
         <activity android:name=".arcgis.ArgisFetureLayerActivity" />
         <activity
             android:name=".arcgis.CalloutActivity"
-            android:screenOrientation="sensorLandscape"></activity>
+            android:screenOrientation="sensorLandscape">
+        </activity>
         <activity android:name=".arcgis.LocationArcGisActivity" />
         <activity
             android:name=".arcgis.GraphicsOverlayActivity"
-            android:screenOrientation="sensorLandscape"></activity>
+            android:screenOrientation="sensorLandscape">
+        </activity>
         <activity android:name=".arcgis.AddGraphicsRendererActivity" />
         <activity android:name=".arcgis.ArcGisChangeSublayerVisibilityActivity" />
         <activity android:name=".arcgis.ArcGisDisplayDrawingStatusActivity" />
         <activity
             android:name=".arcgis.ArcGisActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="sensorLandscape">
+        </activity>
         <activity
             android:name=".bluetooth.BluetoothActivityTwo"
             android:screenOrientation="portrait" />
@@ -70,7 +68,13 @@ mBluetoothAdapter=BluetoothAdapter.getDefaultAdapter( )
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service android:name=".gps.GpsService" />
     </application>
